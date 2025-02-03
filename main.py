@@ -1,9 +1,11 @@
 import os
 import time
+import random
 from github import Github
 import shutil
 from dotenv import load_dotenv
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from tqdm import tqdm
 
 # Load environment variables
 load_dotenv()
@@ -28,20 +30,16 @@ def save_repo_info(folder_name, repo_url, repo_description):
 
 def process_repository(repo):
     try:
-        print(f"\nProcessing: {repo.full_name}")
-        
         if repo.fork:
             return None
         
         folder_name = create_repo_folder(repo.full_name)
         if os.path.exists(folder_name):
-            print(f"Repository {repo.full_name} already processed, skipping...")
             return None
         
         os.makedirs(folder_name)
         save_repo_info(folder_name, repo.html_url, repo.description)
         
-        print(f"Successfully processed: {repo.full_name}")
         return repo.full_name
         
     except Exception as e:
@@ -50,12 +48,13 @@ def process_repository(repo):
 
 def remove_all_folders():
     current_dir = os.getcwd()
-    for item in os.listdir(current_dir):
-        item_path = os.path.join(current_dir, item)
-        if os.path.isdir(item_path) and os.path.exists(os.path.join(item_path, "info.txt")):
+    folders_to_remove = [item for item in os.listdir(current_dir) 
+                        if os.path.isdir(item) and os.path.exists(os.path.join(item, "info.txt"))]
+    
+    if folders_to_remove:
+        for item in tqdm(folders_to_remove, desc="Removing folders"):
             try:
-                shutil.rmtree(item_path)
-                print(f"Removed folder: {item}")
+                shutil.rmtree(item)
             except Exception as e:
                 print(f"Error removing folder {item}: {str(e)}")
 
@@ -67,14 +66,29 @@ def main(limit=None, clean=False):
     
     with ThreadPoolExecutor() as executor:
         try:
+            print("Searching for repositories...")
             query = "topic:security topic:cybersecurity stars:>50 fork:false"
-            repositories = list(g.search_repositories(query=query)[:limit if limit else None])
+            all_repositories = list(g.search_repositories(query=query))
             
-            print(f"Starting to process {len(repositories)} repositories...")
+            # Randomly shuffle the repositories
+            random.shuffle(all_repositories)
             
-            futures = [executor.submit(process_repository, repo) for repo in repositories]
-            processed = [f.result() for f in as_completed(futures) if f.result()]
-            print(f"\nTotal repositories processed: {len(processed)}")
+            # Take the requested number of repositories after shuffling
+            repositories = all_repositories[:limit] if limit else all_repositories
+            
+            print(f"Found {len(repositories)} repositories to process")
+            
+            # Create progress bar
+            with tqdm(total=len(repositories), desc="Processing repositories") as pbar:
+                futures = []
+                for repo in repositories:
+                    future = executor.submit(process_repository, repo)
+                    future.add_done_callback(lambda p: pbar.update(1))
+                    futures.append(future)
+                
+                processed = [f.result() for f in as_completed(futures) if f.result()]
+            
+            print(f"\nSuccessfully processed {len(processed)} repositories")
                 
         except Exception as e:
             print(f"An error occurred: {str(e)}")

@@ -20,11 +20,13 @@ A Python script that automatically discovers and documents popular cybersecurity
 
 1. Clone this repository
 2. Install the required packages:
+
 ```bash
 pip install -r requirements.txt
 ```
 
 3. Create a `.env` file with your GitHub token:
+
 ```bash
 GITHUB_TOKEN=your_github_token_here
 ```
@@ -40,11 +42,13 @@ GITHUB_TOKEN=your_github_token_here
 ## Usage
 
 Run the script:
+
 ```bash
 python main.py
 ```
 
 You'll be prompted to:
+
 1. Process repositories
 2. Remove all existing folders
 3. Remove existing folders and process new repositories
@@ -54,6 +58,7 @@ When processing repositories, you can specify how many to scan or press Enter fo
 ## Output
 
 For each repository, the script creates:
+
 - A folder named after the repository
 - `info.txt` containing the repository URL and description
 
