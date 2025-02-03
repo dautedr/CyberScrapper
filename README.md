@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
-[![GitHub Stars](https://img.shields.io/github/stars/dautedr/github-security-projects-scanner?style=social)](https://github.com/dautedr/github-security-projects-scanner)
+[![GitHub Stars](https://img.shields.io/github/stars/dautedr/CyberScrapper?style=social)](https://github.com/dautedr/CyberScrapper)
 
 A Python script that automatically discovers and documents popular cybersecurity projects on GitHub. The script searches for repositories with 50+ stars in the cybersecurity category, and saves relevant information locally.
 
