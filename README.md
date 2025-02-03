@@ -1,5 +1,9 @@
 # GitHub Security Projects Scanner
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![GitHub Stars](https://img.shields.io/github/stars/dautedr/github-security-projects-scanner?style=social)](https://github.com/dautedr/github-security-projects-scanner)
+
 A Python script that automatically discovers and documents popular cybersecurity projects on GitHub. The script searches for repositories with 50+ stars in the cybersecurity category, and saves relevant information locally.
 
 ## Features
@@ -71,3 +75,15 @@ For each repository, the script creates:
 ## License
 
 MIT License
+
+This project is licensed under the MIT License - a permissive license that allows you to:
+
+- Use the code commercially
+- Modify the code
+- Distribute the code
+- Use the code privately
+- Sublicense the code
+
+The only requirement is that you include the original copyright notice and license disclaimer in any copy of the software/source.
+
+See the [MIT License](https://opensource.org/licenses/MIT) for full details.
